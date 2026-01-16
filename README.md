@@ -1,16 +1,80 @@
-# React + Vite
+# Pixel Art Quiz Game (React + Google Sheets)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+這是一個復古像素風格的網頁問答遊戲，前端使用 **React + Vite** 開發，後端使用 **Google Sheets + Google Apps Script** 作為資料庫與 API。
 
-Currently, two official plugins are available:
+## 🚀 專案功能
+- **像數風格 (Pixel Art)**：包含 UI 元件與字體風格。
+- **Google Sheets 整合**：題目從 Google Sheet 讀取，成績自動寫回。
+- **DiceBear 頭像**：根據 ID 自動產生像素頭像，點擊可隨機切換。
+- **RWD 設計**：支援電腦與手機遊玩。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🛠 安裝與執行 (Frontend)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1.  **安裝依賴**
+    ```bash
+    npm install
+    ```
 
-## Expanding the ESLint configuration
+2.  **設定環境變數**
+    複製 `.env.example` 並重新命名為 `.env`：
+    ```bash
+    cp .env.example .env
+    ```
+    打開 `.env` 填寫您的 Google Apps Script 網址 (見後端設定)：
+    ```env
+    VITE_GOOGLE_APP_SCRIPT_URL=https://script.google.com/macros/s/..../exec
+    VITE_PASS_THRESHOLD=3
+    VITE_QUESTION_COUNT=5
+    ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3.  **啟動開發伺服器**
+    ```bash
+    npm run dev
+    ```
+    瀏覽器打開 `http://localhost:5173` 即可遊玩。
+
+---
+
+## 📊 後端設定 (Google Sheets & GAS)
+
+### 1. 建立 Google Sheet
+建立一個新的 Google Sheet，並新增兩個工作表 (Tabs)：
+
+#### 工作表 A：`題目` (大小寫需一致)
+請在第一列設定以下欄位 (順序很重要)：
+`ID`, `題目`, `A`, `B`, `C`, `D`, `解答`
+
+#### 工作表 B：`回答` (大小寫需一致)
+請在第一列設定以下欄位：
+`ID`, `闖關次數`, `總分`, `最高分`, `第一次通關分數`, `花了幾次通關`, `最近遊玩時間`
+
+### 2. 部署程式碼
+1. 在 Google Sheet 中，點選 `擴充功能` > `Apps Script`。
+2. 將專案中的 `backend/Code.gs`內容完整複製貼上到編輯器中。
+3. 如果您的 Sheet 不是直接綁定 (Standalone Script)，請在程式碼最上方 `SHEET_ID` 填入您的試算表 ID。如果是綁定的 (Container-bound)，留空即可。
+4. 點選右上角 `部署` > `新增部署`。
+5. **選取類型**：`網頁應用程式`。
+6. **執行身分**：`我 (Me)`。
+7. **誰可以存取**：`任何人 (Anyone)` **(重要！否則前端無法存取)**。
+8. 複製產生的 `網頁應用程式網址 (Web App URL)`，貼回前端的 `.env` 檔案中。
+
+---
+
+## 📝 2025 台灣房地產測試題庫
+
+請將下表內容直接複製貼上到您的 **`題目`** 工作表 (從 A2 開始貼上)。
+
+| ID | 題目 | A | B | C | D | 解答 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | 2025年台灣正式開徵碳費，這對營建業最直接的影響為何？ | 土地增值稅增加 | 綠建築容積獎勵取消 | 營建成本上升 (綠色通膨) | 房貸利率調降 | C |
+| 2 | 《囤房稅 2.0》於 2025 年 5 月正式開徵，最高稅率調整為多少？ | 2.4% | 3.6% | 4.8% | 6.0% | C |
+| 3 | 2025 年完工通車的捷運「萬大線第一期」，主要連接哪兩個行政區？ | 萬華 - 中和 | 板橋 - 新莊 | 新店 - 文山 | 三重 - 蘆洲 | A |
+| 4 | 央行在 2024 下半年祭出的「第七波信用管制」，主要針對哪類族群？ | 首購族 | 第二戶以上購屋者 | 商辦投資客 | 地上權住宅買家 | B |
+| 5 | 台積電 2025 年在高雄楠梓園區的擴廠計畫，主要推動了哪一區的房市熱度？ | 左營區 | 鼓山區 | 楠梓區 | 以上皆是 | D |
+| 6 | 「新青安貸款」政策在 2025 年持續實施，但新增了哪項查核機制以防投機？ | 限貸 5 成 | 僅限購買預售屋 | 需簽署自住切結書且徹查租賃 | 利率調昇至 3% | C |
+| 7 | 2025 年台灣房市面臨「雙老」危機，指的是什麼？ | 老人與老屋 | 老建商與老代銷 | 老地主與老銀行 | 老違建與老鐵皮 | A |
+| 8 | 內政部預計 2025 年推動的「社宅新建」目標，主要採用哪種興建方式加速供給？ | 鋼骨結構 (SC) | 預鑄工法 (Modular) | 加強磚造 | 3D 列印 | B |
+| 9 | 針對 2025 年商辦市場趨勢，受惠於 AI 產業發展，哪種等級的商辦需求最強勁？ | C 級老舊商辦 | 頂級 A 辦 (Grade A) | 郊區廠辦 | 住辦混合大樓 | B |
+| 10 | 2025 年實施的國土計畫法，對於農地變更為建地的規範有何變化？ | 變得更寬鬆 | 回歸地方自治 | 變得更嚴格且限制檢舉 | 全面禁止 | C |
