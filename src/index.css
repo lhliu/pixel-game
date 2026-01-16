@@ -1,0 +1,30 @@
+:root {
+  --pixel-bg: #2f2f2f;
+  --pixel-text: #ffffff;
+  --pixel-primary: #ffcd00; /* Retro Yellow */
+  --pixel-secondary: #ff0044; /* Retro Red */
+  --pixel-accent: #00ccff; /* Retro Cyan */
+  --pixel-shadow: #000000;
+  --pixel-border: 4px; /* Simulation of pixel border width */
+  
+  --font-family-pixel: "Courier New", Courier, monospace; /* Fallback until a real pixel font is loaded */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--pixel-bg);
+  color: var(--pixel-text);
+  font-family: var(--font-family-pixel);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+}
+
+/* NES.css style or similar reset */
+button, input {
+  font-family: inherit;
+}
